@@ -147,6 +147,8 @@ This can then be done repeatedly.
 
 **Open question: since document fragments, and thus presumably `TemplateInstance`s, disappear when inserted into an actual DOM tree, does this actually work?** It seems like it wouldn't help most applications, which need to update the page's DOM tree, not just in-memory document fragments.
 
+Justin instead proposes making it easy to introspect the `<template>` element's parts, and then using existing incremental-DOM libraries to update. [He gives a code example](https://github.com/whatwg/html/issues/2254#issuecomment-272308819) based on adding `hasExpression` and `expression` properties to `Text`, `Element`, and `Attr`; I'm not sure if this could be adapted to use the parts API somehow.
+
 ## Nested templates/declarative templating?
 
 It would be ideal if there were some way to allow instantiation to be configured by an attribute in the `<template>` markup. Such as:
