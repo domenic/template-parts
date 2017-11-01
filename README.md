@@ -56,7 +56,7 @@ Assume we somehow (see below) get `x` and `y` objects representing the template 
 // (or maybe it keeps "hello" and " world" as separate text nodes)
 x.replaceWith("hello");
 
-// Inserts the div and text node in place of the {{x}} part
+// Inserts an empty span and also text node in place of the {{x}} part
 x.replaceWith(document.createElement("span"), "hello");
 
 x.expression === "x";
@@ -66,7 +66,7 @@ x.parentNode === div;
 y.value = "bar";
 
 y.expression === "y";
-y.attribute === div.attributes.class;
+y.attribute === div.getAttributeNode("class");
 ```
 
 ### More types of template parts
@@ -77,7 +77,9 @@ Probably we should proceed by defining an MVP of reasonable template part kinds,
 
 That is, we _don't_ need to support every possibility. When someone tries to do `<{{tagName}} class="foo">`, we just say that isn't supported, and [treat this as the HTML parser would normally](http://software.hixie.ch/utilities/js/live-dom-viewer/?saved=5415) instead of creating a special "tag name template part".
 
-A likely candidate in addition to the two identified above would be a separate whole-attribute template part, for cases like `foo={{bar}}`, as opposed to attribute value position `foo="{{bar}}"`. Would this actually need to be separate, one wonders? It seems many frameworks make the distinction between these two syntaxes, so we can try to draw inspiration from them to gather use cases.
+We definitely also need a whole-attribute template part, to be able to handle boolean attributes.
+
+A possible other candidate would be a separate whole-attribute template part, for cases like `foo={{bar}}`, as opposed to attribute value position `foo="{{bar}}"`. Would this actually need to be separate, one wonders? It seems many frameworks make the distinction between these two syntaxes, so we can try to draw inspiration from them to gather use cases.
 
 ## `<template>` API
 
