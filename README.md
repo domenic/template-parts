@@ -156,25 +156,25 @@ Justin instead proposes making it easy to introspect the `<template>` element's 
 It would be ideal if there were some way to allow instantiation to be configured by an attribute in the `<template>` markup. Such as:
 
 ```html
-<template proccessor="fancy-template">
+<template processor="fancy-template">
   <ul>
-    <template proccessor="for-each" items="{{items}}">
+    <template processor="for-each" items="{{items}}">
       <li class={{class}} data-value={{value}}>{{label}}</li>
     </template>
   </ul>
 </template>
 ```
 
-It would be ideal if calling `outerTemplate.instantiate(params)` would invoke some proccessor by the name `fancy-template`, and also some specialized proccessor for the name `for-each` on the inner template. This would allow libraries to associate proccessors declaratively, including ones for common nested-template use cases like loops or conditionals.
+It would be ideal if calling `outerTemplate.instantiate(params)` would invoke some processor by the name `fancy-template`, and also some specialized processor for the name `for-each` on the inner template. This would allow libraries to associate processors declaratively, including ones for common nested-template use cases like loops or conditionals.
 
 (Why are loops and conditions natural as nested `<template>`s? Because they are semantically very template-like: they are chunks of DOM that may or may not be stamped out one or more times. Thus, it's natural to take advantage of the machinery we are proposing here to make them work.)
 
 We could make this work in a variety of ways:
 
-- Customized built-in elements that derive from `HTMLTemplateElement` (using `is=""` instead of `proccessor=""`), which can install their own default processor through a new hook
-- Some sort of second global registry, apart from the custom elements registry: e.g. `HTMLTemplateElement.proccessors.define("fancy-template", processor)`
+- Customized built-in elements that derive from `HTMLTemplateElement` (using `is=""` instead of `processor=""`), which can install their own default processor through a new hook
+- Some sort of second global registry, apart from the custom elements registry: e.g. `HTMLTemplateElement.processors.define("fancy-template", processor)`
 - Using the actual global object as a global registry, so that `processor="fancy-template"` looks for and invokes `window["fancy-template"]`
-- Just relying on framework code to handle this, so that they figure out how to properly translate `proccessor=""` attributes into the appropriate first argument to pass to `instantiate()`
+- Just relying on framework code to handle this, so that they figure out how to properly translate `processor=""` attributes into the appropriate first argument to pass to `instantiate()`
 
 The trickiest part here is figuring out how the nested templates interact, e.g. what order they are processed in, and how they are represented in the processor functions. One proposal was to have a new type of template part that represents the nested template, with its own API.
 
